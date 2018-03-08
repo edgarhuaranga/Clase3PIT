@@ -1,8 +1,12 @@
 package com.ehuaranga.clase3.LocalDB;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.ehuaranga.clase3.Model.Comprador;
 
 import static com.ehuaranga.clase3.LocalDB.Clase3DBContract.DBClase3.COLUMN_NAME_BARCODE_PRODUCTOS;
 import static com.ehuaranga.clase3.LocalDB.Clase3DBContract.DBClase3.COLUMN_NAME_BARCODE_REGISTRO;
@@ -54,11 +58,56 @@ public class Clase3DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(SQL_CREATE_TABLE_USUARIOS);
+        db.execSQL(SQL_CREATE_TABLE_PRODUCTOS);
+        db.execSQL(SQL_CREATE_TABLE_REGISTROS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL(SQL_DELETE_TABLE_PRODUCTOS);
+        db.execSQL(SQL_DELETE_TABLE_USUARIOS);
+        db.execSQL(SQL_DELETE_TABLE_REGISTROS);
+        onCreate(db);
     }
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public void agregarUsuario(Comprador usuario){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_ID_USUARIO, usuario.getId());
+        values.put(COLUMN_NAME_NOMBRE_USUARIO, usuario.getNombre());
+        values.put(COLUMN_NAME_NACIONALIDAD_USUARIO, usuario.getNacionalidad());
+
+        db.insert(TABLE_USUARIOS, null, values);
+        db.close();
+    }
+
+    public void eliminarUsuario(Comprador usuario){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM "+TABLE_USUARIOS+" WHERE "+COLUMN_NAME_ID_USUARIO+" = '"+usuario.getId()+"'";
+        db.execSQL(query);
+    }
+
+    public Comprador getUsuarioById(String id){
+        Comprador comprador = new Comprador();
+
+        String query = "SELECT * FROM "+TABLE_USUARIOS+ " WHERE "+COLUMN_NAME_ID_USUARIO + " = '"+id+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            comprador.setId(id);
+            comprador.setNombre(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NOMBRE_USUARIO)));
+            comprador.setNacionalidad(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NACIONALIDAD_USUARIO)));
+        }
+
+        return comprador;
+    }
+
+
+
 }

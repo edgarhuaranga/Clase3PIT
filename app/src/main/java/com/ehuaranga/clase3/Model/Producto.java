@@ -9,6 +9,10 @@ public class Producto {
     String nombre;
     float precio;
 
+    public Producto(){
+
+    }
+
     public Producto(String barcode, String nombre, float precio) {
         this.barcode = barcode;
         this.nombre = nombre;

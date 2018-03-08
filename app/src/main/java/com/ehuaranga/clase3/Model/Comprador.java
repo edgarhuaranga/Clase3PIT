@@ -9,6 +9,9 @@ public class Comprador {
     String nombre;
     String nacionalidad;
 
+    public Comprador() {
+    }
+
     public Comprador(String id, String nombre, String nacionalidad) {
         this.id = id;
         this.nombre = nombre;
