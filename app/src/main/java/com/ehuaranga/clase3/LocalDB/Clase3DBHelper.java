@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ehuaranga.clase3.Model.Comprador;
+import com.ehuaranga.clase3.Model.Producto;
+import com.ehuaranga.clase3.Model.Registro;
+
+import java.util.ArrayList;
 
 import static com.ehuaranga.clase3.LocalDB.Clase3DBContract.DBClase3.COLUMN_NAME_BARCODE_PRODUCTOS;
 import static com.ehuaranga.clase3.LocalDB.Clase3DBContract.DBClase3.COLUMN_NAME_BARCODE_REGISTRO;
@@ -81,7 +85,6 @@ public class Clase3DBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_NAME_ID_USUARIO, usuario.getId());
         values.put(COLUMN_NAME_NOMBRE_USUARIO, usuario.getNombre());
         values.put(COLUMN_NAME_NACIONALIDAD_USUARIO, usuario.getNacionalidad());
-
         db.insert(TABLE_USUARIOS, null, values);
         db.close();
     }
@@ -94,7 +97,6 @@ public class Clase3DBHelper extends SQLiteOpenHelper {
 
     public Comprador getUsuarioById(String id){
         Comprador comprador = new Comprador();
-
         String query = "SELECT * FROM "+TABLE_USUARIOS+ " WHERE "+COLUMN_NAME_ID_USUARIO + " = '"+id+"'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -104,10 +106,66 @@ public class Clase3DBHelper extends SQLiteOpenHelper {
             comprador.setNombre(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NOMBRE_USUARIO)));
             comprador.setNacionalidad(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NACIONALIDAD_USUARIO)));
         }
-
         return comprador;
     }
 
+    public void agregarProducto(Producto producto){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_BARCODE_PRODUCTOS, producto.getBarcode());
+        values.put(COLUMN_NAME_NOMBRE_PRODUCTOS, producto.getNombre());
+        values.put(COLUMN_NAME_PRECIO_PRODUCTOS, producto.getPrecio());
+        db.insert(TABLE_PRODUCTOS, null, values);
+        db.close();
+    }
 
+    public void eliminarUsuario(Producto producto){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM "+TABLE_PRODUCTOS+" WHERE "+COLUMN_NAME_BARCODE_PRODUCTOS+" = '"+producto.getBarcode()+"'";
+        db.execSQL(query);
+    }
+
+    public Producto getProductoById(String id){
+        Producto producto = new Producto();
+        String query = "SELECT * FROM "+TABLE_PRODUCTOS+ " WHERE "+COLUMN_NAME_BARCODE_PRODUCTOS+ " = '"+id+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            producto.setBarcode(id);
+            producto.setNombre(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NOMBRE_PRODUCTOS)));
+            producto.setPrecio(cursor.getFloat(cursor.getColumnIndex(COLUMN_NAME_PRECIO_PRODUCTOS)));
+        }
+        return producto;
+    }
+
+    public void agregarRegistro(Comprador usuario, Producto producto){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_ID_REGISTRO, usuario.getId());
+        values.put(COLUMN_NAME_BARCODE_REGISTRO, producto.getBarcode());
+        values.put(COLUMN_NAME_IDUSER_REGISTRO, usuario.getNacionalidad());
+        db.insert(TABLE_REGISTROS, null, values);
+        db.close();
+    }
+
+
+    public ArrayList<Registro> obtenerRegistros(){
+        ArrayList<Registro> registros = new ArrayList<>();
+        String query = "SELECT * FROM "+TABLE_REGISTROS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext()){
+            Registro registro = new Registro();
+            registro.setId(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_ID_REGISTRO)));
+            registro.setBarcodeProducto(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_BARCODE_REGISTRO)));
+            registro.setIdComprador(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_IDUSER_REGISTRO)));
+
+            registros.add(registro);
+        }
+
+        return registros;
+    }
 
 }
