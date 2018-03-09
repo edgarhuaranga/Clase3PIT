@@ -1,5 +1,6 @@
 package com.ehuaranga.clase3;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -79,11 +80,15 @@ public class MainActivity extends AppCompatActivity {
         buttonVerResultados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Producto> productos = helper.obtenerProductos();
+                /*ArrayList<Producto> productos = helper.obtenerProductos();
                 textViewResultados.setText("");
                 for(Producto producto: productos){
                     textViewResultados.append(producto.getNombre()+"\n");
-                }
+                }*/
+
+                Intent intent = new Intent(MainActivity.this, SegundaPantalla.class);
+                intent.putExtra("mensaje", editTextBarcodeProducto.getText().toString());
+                startActivity(intent);
             }
         });
 
