@@ -37,6 +37,13 @@
             android:inputType="numberDecimal"
             android:hint="Precio del producto"/>
 
+
+        <Button
+            android:id="@+id/button_insertar_producto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insertar Producto"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -68,6 +75,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nacionalidad"/>
+
+        <Button
+            android:id="@+id/button_insertar_comprador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insertar Comprador"/>
+
+
     </LinearLayout>
 
 </LinearLayout>
