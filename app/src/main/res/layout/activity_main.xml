@@ -85,4 +85,19 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/button_ver_database"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver base de datos"/>
+        <TextView
+            android:id="@+id/textview_consulta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </LinearLayout>

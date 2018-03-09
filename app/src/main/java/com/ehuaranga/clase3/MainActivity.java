@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ehuaranga.clase3.LocalDB.Clase3DBHelper;
 import com.ehuaranga.clase3.Model.Comprador;
 import com.ehuaranga.clase3.Model.Producto;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button buttonInsertarProducto;
     Button buttonInsertarComprador;
+    TextView textViewResultados;
+    Button buttonVerResultados;
+
     Clase3DBHelper helper;
 
     @Override
@@ -41,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         buttonInsertarProducto = findViewById(R.id.button_insertar_producto);
         buttonInsertarComprador = findViewById(R.id.button_insertar_comprador);
+        buttonVerResultados = findViewById(R.id.button_ver_database);
+
+        textViewResultados = findViewById(R.id.textview_consulta);
 
         buttonInsertarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonVerResultados.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Producto> productos = helper.obtenerProductos();
+                textViewResultados.setText("");
+                for(Producto producto: productos){
+                    textViewResultados.append(producto.getNombre()+"\n");
+                }
+            }
+        });
 
     }
 }

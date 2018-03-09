@@ -168,4 +168,22 @@ public class Clase3DBHelper extends SQLiteOpenHelper {
         return registros;
     }
 
+    public ArrayList<Producto> obtenerProductos(){
+        ArrayList<Producto> productos = new ArrayList<>();
+        String query = "SELECT * FROM "+TABLE_PRODUCTOS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext()){
+            Producto producto = new Producto();
+            producto.setBarcode(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_BARCODE_PRODUCTOS)));
+            producto.setNombre(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NOMBRE_PRODUCTOS)));
+            producto.setPrecio(Float.parseFloat(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PRECIO_PRODUCTOS))));
+
+            productos.add(producto);
+        }
+
+        return productos;
+    }
+
 }
